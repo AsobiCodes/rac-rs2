@@ -1,0 +1,13 @@
+/generated/
+/build/
+/player/
+/toolchain/
+/bundled/
+/Play.cmd
+*.iso
+/oracle/rc2gen/
+/oracle/src/vu0_prog*.rs
+/oracle/src/skinff_ee.rs
+/oracle/src/skinff_vu.rs
+/rac-rs/src/engine/gsfull/vu1_prog*.rs
+/rac-rs/src/engine/gsfull/vu1aot_gen.rs

@@ -1,0 +1,11 @@
+# The build root of the game (cargo workspace). It sits here, above rac-rs\ and oracle\, so that every crate of the game,
+# including the code that setup generates from your disc in oracle\rc2gen, lies inside it (same reason as in the R&C1 release).
+[workspace]
+members = ["rac-rs/exe_rc2", "rac-rs/crates/formats", "rac-rs/crates/engine", "rac-rs/crates/rac2", "rac-rs/crates/ngx_abi"]
+default-members = ["rac-rs/exe_rc2"]
+resolver = "3"
+
+# wgpu-hal 30.0.1 with one change (rac-rs/vendor/wgpu-hal/README_RAC_RS.txt): its DirectX 12 start-up does not create
+# IDXGIFactoryMedia, which ReShade's DXGI hook crashes on. Cargo reads [patch] only here at the workspace root.
+[patch.crates-io]
+wgpu-hal = { path = "rac-rs/vendor/wgpu-hal" }

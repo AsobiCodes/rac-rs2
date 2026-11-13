@@ -1,0 +1,21 @@
+[package]
+name = "rac2"
+version = "0.1.0"
+edition = "2024"
+# Engine split stage E5 (ENGINE_SPLIT.md): the Ratchet & Clank 2 pack (glue to R&C2's RAM: camera, mobys, lights, fog,
+# shadows, tie colours; its levels through rac-formats into the engine renderer; its HUD through gsfull). Sources in
+# rac-rs/src/rac2 (crate root lib.rs); this folder holds only the manifest. It never depends on rac1. The exe is rac-rs/exe_rc2
+# (rac2-play), which links it with the recompiled R&C2 code (ee-game-rc2).
+
+[lib]
+name = "rac2"
+path = "../../src/rac2/lib.rs"
+
+[dependencies]
+rac-formats = { path = "../formats" }
+rac-engine = { path = "../engine" }
+bytemuck = { version = "1.25.2", features = ["derive", "extern_crate_alloc"] }
+pollster = "1.0.1"
+wgpu = "30.0.1"
+winit = "0.30.13"
+ee-oracle = { path = "../../../oracle" }

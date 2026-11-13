@@ -1,0 +1,22 @@
+[package]
+name = "rac2-play"
+version = "0.1.0"
+edition = "2024"
+
+# The R&C2 exe: the R&C2 pack (crate rac2, ../crates/rac2, on the engine) + the recompiled R&C2 retail code (ee-game-rc2,
+# oracle/rc2gen). A workspace of its own: the R&C1 workspace (.., exe/) neither builds nor needs the generated R&C2 crates.
+[[bin]]
+name = "rac2-play"
+path = "src/main.rs"
+
+[dependencies]
+rac2 = { path = "../crates/rac2" }
+ee-game-rc2 = { path = "../../oracle/rc2gen/game" }
+
+[features]
+# Public build (setup.ps1): no console window next to the game (windows_subsystem in src/main.rs).
+windows_gui = []
+
+[build-dependencies]
+embed-manifest = "1"
+
