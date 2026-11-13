@@ -109,7 +109,7 @@ if ($Game -eq 'rac2') {
     $GenFlags = @('--no-comments', '--compact', '--shared-slow', '--outline-mem', '--direct-mem', '--vu-guard')
     $Levels = 0..27                    # the 27 level WADs of R&C2 + pseudo-level 27 (the front-end code sets r2l27_00..17, from the boot ELF as loaded; tools\gen_rc2.sh in the dev tree)
     $GenSubDir = 'rc2gen'
-    $GenExtra = @('--stubs', (Join-Path $root 'oracle\src\rc2\stubs.txt'))
+    $GenExtra = @('--stubs', ('"' + (Join-Path $root 'oracle\src\rc2\stubs.txt') + '"'))   # quoted: Start-Process joins the list with spaces (v0.1.1)
 }
 
 function Step($text) { Write-Host ''; Write-Host "== $text" -ForegroundColor Cyan }
