@@ -11,6 +11,31 @@ fn gate_tells_the_pause_root_from_the_title_root() {
 	assert_eq!(gate(2, 0x259458, 0, 4), None, "a child record with id 2 is not the root");
 }
 
+/// [hf011 2] The intro flight after "Continue anyway? Yes" keeps the title state word at 4 with the root as the current page: only
+/// the main-loop mode word tells it from the title menu (3) and a title dialog (4) [C dumps hf1/fo2/dumps_no, dumps_yes].
+#[test]
+fn title_state_is_dropped_outside_the_title_menu_and_its_dialogs() {
+	assert_eq!(title_state_of(4, 3), 4, "the title menu");
+	assert_eq!(title_state_of(4, 4), 4, "a title dialog (the card box stands over the root)");
+	assert_eq!(title_state_of(4, 6), 0, "the intro flight: no title root");
+	assert_eq!(title_state_of(4, 1), 0);
+	assert_eq!(title_state_of(1, 6), 1, "the Save page's exits: the state word is 1 anyway");
+	assert_eq!(title_state_of(2, 3), 2, "logos");
+	assert_eq!(gate(2, 0, 0, title_state_of(4, 6)), None);
+	assert_eq!(gate(2, 0, 0, title_state_of(4, 3)), Some(Kind::Title));
+	let mut ram = vec![0u8; 0x200_0000];
+	ram[TITLE_STATE as usize..TITLE_STATE as usize + 4].copy_from_slice(&4u32.to_le_bytes());
+	ram[TITLE_MODE as usize..TITLE_MODE as usize + 4].copy_from_slice(&6u32.to_le_bytes());
+	assert_eq!(title_state(&ram), 0);
+	ram[TITLE_MODE as usize..TITLE_MODE as usize + 4].copy_from_slice(&3u32.to_le_bytes());
+	assert_eq!(title_state(&ram), 4);
+	// The run's own RAM, where it is on this PC.
+	for (f, want) in [("ram00540.bin", 4), ("ram00790.bin", 4), ("ram00900.bin", 0), ("ram01300.bin", 0)] {
+		let Ok(ram) = std::fs::read(format!("E:/ratchet/scratch_rc2_hf/hf1/fo2/dumps_no/{f}")) else { continue };
+		assert_eq!(title_state(&ram), want, "{f}");
+	}
+}
+
 #[test]
 fn drive_walks_the_short_way_round_and_picks() {
 	let mut d = Drive { target: Some(5), confirm: true, ..Drive::default() };

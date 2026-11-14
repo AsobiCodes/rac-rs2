@@ -31,7 +31,7 @@ When you run setup, it translates the PS2 code from your disc into native Rust (
 
 ## Setup (Windows)
 
-1. Unzip **rac-rs2-0.1.0.zip** anywhere (a folder without special characters in its path is safest).
+1. Unzip **rac-rs2-0.1.1.zip** anywhere (a folder without special characters in its path is safest).
 2. Double-click **Setup.cmd** and pick your `.iso` file. A tick-box offers to install the **RAC-RS Launcher** as well (an optional app, see [Launcher](#launcher)).
 3. Wait. Setup gets its own private copy of its tools into the `toolchain` folder (nothing is installed on your PC, no admin rights), checks the disc, generates the game code from it and builds the game. The first build takes about 15 minutes on a fast PC and up to about half an hour on a 4-core CPU.
 4. Play: double-click **"Ratchet & Clank 2 (rac-rs)"** on your desktop, or **Play.cmd** in the game folder (Play.cmd also switches on the diagnostic record, see [Reporting a problem](#reporting-a-problem)). `Setup.cmd -Console` runs setup in a console window if something goes wrong.

@@ -32,6 +32,9 @@ pub const PAUSE_CURSOR_OFF: u32 = 0x39160 + 0x4ac;
 pub const TITLE_CURSOR: u32 = 0x1ff6ae8;
 /// The title's state word (= G at the title): 4 once the panels show.
 pub const TITLE_STATE: u32 = 0x1f2840;
+/// [hf011 2] The boot ELF's main-loop mode word (DAT_001a8c60 [C SCES_516.07.c main loop]: 3 = the title menu runs, 4 = a title
+/// dialog, 6 = the flight into the game); a level's own program keeps other data at this address.
+pub const TITLE_MODE: u32 = 0x1a8c60;
 pub const BOLTS: u32 = 0x1a7a80;
 pub const LEVEL: u32 = 0x1a7a78;
 /// The language word (0 English, 2 French, 3 German, 4 Spanish, 5 Italian) [C rac2/notes_gamefacts.md].
@@ -73,6 +76,23 @@ pub fn manager(ram: &[u8], s: &modern_open::Snap) -> u32 {
 		m
 	} else {
 		s.manager
+	}
+}
+
+/// [hf011 2] The title state word for `gate`, 0 while the title's main loop runs neither its menu nor a dialog. After New Game on a
+/// card without save data, "No" and "Continue anyway? Yes", retail starts the intro flight with the state word still 4 and the root
+/// still the current page (mode word 6; the Save page's two exits set the state word to 1) [C RAM dumps hf1/fo2/dumps_no 830..1300,
+/// dumps_yes 1000..1450]: the modern root stayed drawn over the first ~8 s of the intro.
+pub fn title_state(ram: &[u8]) -> u32 {
+	title_state_of(rd(ram, TITLE_STATE), rd(ram, TITLE_MODE))
+}
+
+/// Pure half of `title_state`.
+pub fn title_state_of(state: u32, mode: u32) -> u32 {
+	if state == 4 && !matches!(mode, 3 | 4) {
+		0
+	} else {
+		state
 	}
 }
 
@@ -444,9 +464,12 @@ fn read(ram: &[u8], g: &mut Game) -> Option<Facts> {
 	// [b45 P3] B13: with the game mode word, so the vendor / Ship Shack / Galactic Map pages are held over short gaps too.
 	let mode = rd(ram, if rd(ram, LEVEL) == 1 { crate::modern_vendor::MODE_L1 } else { crate::modern_vendor::MODE });
 	crate::host::screens_hold::note(s.as_ref().map_or(0, |s| s.page_id), s.as_ref().map_or(0, |s| parent(rd(ram, s.page + 0xe0))), mgr != 0, mode);
+	if crate::modern_card_box::active() {
+		return None; // [b57 NG] a title dialog is up: its own modern box (modern_card_box.rs) or retail's picture, never a frozen root
+	}
 	let s = s?;
 	let page = s.page;
-	let kind = gate(s.page_id, rd(ram, page + 0xe0), mgr, rd(ram, TITLE_STATE))?;
+	let kind = gate(s.page_id, rd(ram, page + 0xe0), mgr, title_state(ram))?; // [hf011 2] not over the intro flight
 	let ready = match kind {
 		Kind::Pause => READY_PAUSE.load(Ordering::Relaxed),
 		Kind::Title => READY_TITLE.load(Ordering::Relaxed),

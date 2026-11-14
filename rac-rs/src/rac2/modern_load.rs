@@ -245,7 +245,7 @@ pub fn split_lines(bytes: &[u8]) -> Vec<String> {
 }
 
 /// The raw bytes of text `id` (`Texts::get` without the decoding, which drops the 0x01 line breaks).
-fn text_bytes<'a>(ram: &'a [u8], t: &Texts, id: u32, n: usize) -> Option<&'a [u8]> {
+pub(crate) fn text_bytes<'a>(ram: &'a [u8], t: &Texts, id: u32, n: usize) -> Option<&'a [u8]> {
 	let a = (0..t.n).map(|k| t.start + 16 * k).find(|&a| rd(ram, a + 4) == id)?;
 	let p = (rd(ram, a) & 0x1ff_ffff) as usize;
 	ram.get(p..(p + n).min(ram.len()))
@@ -530,6 +530,9 @@ fn slot(ram: &[u8], t: &Texts, r: Raw) -> Slot {
 /// to a page that is not a slot page: no classic frame in between), None = no slot page.
 fn read(ram: &[u8], g: &mut Game) -> Option<Option<Facts>> {
 	g.closed = false;
+	if crate::modern_card_box::active() {
+		return None; // [b57 NG] a title dialog is up
+	}
 	let gw = match modern_open::snap_now(ram) {
 		Some(s) => *g.last_g.insert(s.g),
 		None => g.last_g.take()?,

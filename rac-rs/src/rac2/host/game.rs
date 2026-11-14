@@ -254,6 +254,7 @@ fn pace(next: &mut Instant) -> f32 {
 /// [PC] The modern pages' pad filters, in order (each returns the pad bit for bit while its page is not up).
 fn modern_filters(ram: &[u8], b: u16, s: [u8; 4]) -> (u16, [u8; 4]) {
 	// [PC] The modern Options page (modern_open.rs): its door on the Camera row, and a neutral pad for the game while it is up.
+	crate::modern_card_box::pre(ram); // [b57 NG] the title's card message box: read first, so the roots below stand aside
 	let (b, s) = crate::modern_open::filter(ram, b, s);
 	// [PC] The modern pause and title roots (modern_screen.rs): pulses for the mouse, Quit to Desktop on the title.
 	let (b, s) = crate::modern_screen::filter(ram, b, s);
@@ -268,7 +269,8 @@ fn modern_filters(ram: &[u8], b: u16, s: [u8; 4]) -> (u16, [u8; 4]) {
 	let (b, s) = crate::modern_grid::filter(ram, b, s);
 	let (b, s) = crate::modern_qs::filter(ram, b, s);
 	let (b, s) = crate::modern_help::filter(ram, b, s);
-	(b, s)
+	crate::modern_card_box::post(b, s) // [b57 NG] the box's Circle / Cross / Triangle pulse
+
 }
 
 /// The game thread's side of the engine's world.

@@ -76,6 +76,7 @@ pub mod modern_optlist_quit; // [b47 X3]
 pub mod modern_pages;
 pub mod modern_screen;
 pub mod modern_load; // [PC] ld lane: the modern Load / Save Game slot pages
+pub mod modern_card_box; // [b57 NG] the title's memory-card message boxes
 pub mod modern_load_page; // [PC] ld lane
 pub mod real_clock; // [PC] ld lane: the real date on the saves of a player session
 pub mod modern_map;

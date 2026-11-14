@@ -135,6 +135,15 @@ fn pages(g: &mut Gpu, ok: bool, show: bool, world: bool, aspect: f32, done: u64)
 		*lock() = None;
 		return true;
 	}
+	// [b57 NG] The title's memory-card message box over the title root (screens_cardbox.rs), before the pages it stands over.
+	crate::modern_card_box::set_ready(ok_read);
+	if !ok {
+		super::screens_cardbox::clear();
+	}
+	if ok && !world && super::screens_cardbox::draw(g) {
+		*lock() = None;
+		return true;
+	}
 	// [PC] ld lane: the modern Load / Save Game slot pages (screens_load.rs), on the title and in the pause menu.
 	crate::modern_load::set_ready(ok_read, ok_read && slot_world);
 	if ok && super::screens_load::draw(g, slot_world) {
@@ -176,6 +185,9 @@ impl App {
 		// [b45 P4A] U10: while a tab switch runs no page is up; a mouse press then would reach the game as its Circle. Swallowed.
 		if crate::modern_tabs::holding() && matches!(event, WindowEvent::MouseInput { state: ElementState::Pressed, .. }) {
 			return true;
+		}
+		if super::screens_cardbox::event(self.ui_pos, event) {
+			return true; // [b57 NG]
 		}
 		if super::screens_vendor::event(self.ui_pos, event) || super::screens_ship::event(self.ui_pos, event) || super::screens_grid::event(self.ui_pos, event) || super::screens_qs::event(self.ui_pos, event) {
 			return true;

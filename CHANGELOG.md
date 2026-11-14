@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.1.1 (2026-11-14)
+
+A hotfix for one bug that stopped new players at the title menu.
+
+- Fixed: **New Game and Load did nothing on the title menu** when there was no Ratchet & Clank 2 save file yet, which is every new install. The game was asking "Would you like to create a Ratchet and Clank 2 save file?", but the modern menu did not show the question and did not pass the answer on, so the menu looked frozen. It was not tied to AMD or to handhelds. The modern title menu now shows the game's memory-card messages as a box of its own, with the game's own text: the "create a save file?" question, "Creating Save Game File", "Continue anyway?", "Please insert a Memory Card ... that contains game data" and the failure messages. Answer with the gamepad button the box shows, the matching key (G = Circle, T = Triangle, Space = Cross), a click on a button, a right click or Esc for No / Back, Enter for the first button.
+- If you switched "Menu style" to Classic to get past the title menu, you can switch back to Modern.
+- Known (also in v0.1.0, seen in automated runs): "Quit Game" in the pause menu's Options (back to the title menu) may end in a black screen after the logos; "Quit to Desktop" works.
+
+Everything else is the same as v0.1.0, including the speed profile. Saves and options carry over.
+
 ## v0.1.0 (2026-11-14)
 
 First public release of RAC-RS 2: an unofficial PC port of **Ratchet & Clank 2 / Going Commando** (PlayStation 2, 2003), built on your PC from your own PAL / Europe disc (SCES-51607). No game data is included. v0.1 is an early release: the goal is a game you can play from start to end without visual glitches.

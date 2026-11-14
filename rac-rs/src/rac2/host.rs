@@ -26,6 +26,7 @@ mod screens;
 mod screens_ship;
 mod screens_grid;
 mod screens_load; // [PC] ld lane
+mod screens_cardbox; // [b57 NG]
 mod screens_items;
 mod screens_qs;
 mod screens_switch;
