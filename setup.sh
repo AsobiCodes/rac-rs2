@@ -1156,7 +1156,8 @@ if [ "$regenerate" -eq 1 ] || [ "$have" != "$want" ]; then
     [ $? -eq 0 ] || Fail 'listing the generated files failed (tools/share_iso.py --snapshot)'
     # The shared templates of the previous generation go (setup.ps1 does the same): the sharing pass below refuses to run on
     # a rec/ that already has sh_NN crates, and it rebuilds them from the new level crates, which recgen_iso.py writes in full.
-    for sh_d in "$root/$genout"/rec/sh_*; do
+    # R&C2's are r2sh_NN (the names share_iso.py SH_DIR matches).
+    for sh_d in "$root/$genout"/rec/sh_* "$root/$genout"/rec/r2sh_*; do
         [ -d "$sh_d" ] && rm -rf "$sh_d"
     done
     # Levels 0..27 (27 = the front-end sets, pseudo-level), --jobs of them at a time. The levels are started in order and reaped in

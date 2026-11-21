@@ -3590,8 +3590,9 @@ if ($Regenerate -or $have -ne $want) {
     $genSnap = Join-Path $gen 'logs\gen_files_before.txt'
     & $python (Join-Path $root 'tools\share_iso.py') --rec (Join-Path $genOut 'rec') --snapshot $genSnap
     if ($LASTEXITCODE -ne 0) { Fail 'listing the generated files failed (tools\share_iso.py --snapshot)' }
-    # shared templates of the previous generation (rebuilt below from the new level crates, which recgen_iso.py writes in full)
-    Get-ChildItem -LiteralPath (Join-Path $genOut 'rec') -Directory -Filter 'sh_*' -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+    # shared templates of the previous generation (rebuilt below from the new level crates, which recgen_iso.py writes in full);
+    # R&C2's are r2sh_NN (the names share_iso.py SH_DIR matches)
+    Get-ChildItem -LiteralPath (Join-Path $genOut 'rec') -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^(r2)?sh_\d+$' } | Remove-Item -Recurse -Force
     $t = Get-Date
     $queue = New-Object System.Collections.Queue
     foreach ($l in $Levels) { $queue.Enqueue($l) }
