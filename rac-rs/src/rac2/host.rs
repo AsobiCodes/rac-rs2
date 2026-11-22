@@ -689,6 +689,8 @@ pub fn run(iso: &str, o: Opts, shots: Option<String>) -> Result<(), String> {
 	let el = EventLoop::new().map_err(|e| e.to_string())?;
 	el.set_control_flow(ControlFlow::Poll);
 	rac_engine::input::pad::set_left_stick(crate::pc_stickdz::left_stick);
+	#[cfg(target_os = "linux")]
+	rac_engine::input::pad::set_hid_reader(crate::lxpad::state, crate::lxpad::connected);
 	let mut app = App { gpu: None, stage: frame::Stage::default(), gs, shared: shared.clone(), held: HashSet::new(), mouse: [false; 5], focused: false, test_window: std::env::var_os("RAC_TEST_WINDOW").is_some_and(|v| v == "hidden"), cursor: cursor::Cursor::default(), native, ov_overlay: false, aspect: 4.0 / 3.0, shots: shot_set, smooth: Default::default(), sub_at: (0, 0), freeze: Default::default(), ov_hold: Default::default(), ov_layers: Default::default(), layers_new: None, ov_view: None, pace: Pace::new(), iso: iso.to_string(), playing: None, movie_audio: None, sync: Default::default(), livecap: livecap::LiveCap::from_env(), ui_pos: None, fullscreen: false };
 	el.run_app(&mut app).map_err(|e| e.to_string())?;
 	rac_engine::gscap_guard::quit();
