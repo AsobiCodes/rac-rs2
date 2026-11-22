@@ -876,6 +876,7 @@ rac-rs/src/rac2/install_start.rs
 rac-rs/src/rac2/kbm_table.rs
 rac-rs/src/rac2/lib.rs
 rac-rs/src/rac2/looks.rs
+rac-rs/src/rac2/lxpad.rs
 rac-rs/src/rac2/metal_materials.rs
 rac-rs/src/rac2/moby_cull.rs
 rac-rs/src/rac2/modcam_blend.rs

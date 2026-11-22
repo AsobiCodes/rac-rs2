@@ -25,6 +25,7 @@ mod update_check; // [v0.1 U] the automatic update check (Windows: setup.ps1 -La
 mod update_notice_linux; // [v0.1 U] duplicate of rac1's until the engine batch shares it
 pub mod chunks;
 mod host;
+mod lxpad;
 pub mod movie;
 pub mod diag_facts; // [b50 V9] RAC_DIAG facts (Pack::diag_facts)
 mod movie_overlay;

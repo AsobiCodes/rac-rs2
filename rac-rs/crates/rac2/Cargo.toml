@@ -19,3 +19,7 @@ pollster = "1.0.1"
 wgpu = "30.0.1"
 winit = "0.30.13"
 ee-oracle = { path = "../../../oracle" }
+
+# Linux: gamepads as evdev devices, read with gilrs (src/rac2/lxpad.rs), as R&C1 does.
+[target.'cfg(target_os = "linux")'.dependencies]
+gilrs = { version = "0.11.2" }
